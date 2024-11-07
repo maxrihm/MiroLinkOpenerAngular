@@ -52,6 +52,7 @@ export class MiroService {
     const selectedCircleSize = sizeMap[this.selectedSize];
     const selectedTextSize = sizeMap[this.selectedSize];
 
+    // Create the circle
     await miro.board.createShape({
       shape: 'circle',
       style: {
@@ -66,6 +67,11 @@ export class MiroService {
       linkedTo: this.generatedLink
     });
 
+    // Calculate the text height and offset
+    const textHeight = selectedTextSize * 1.42857;
+    const offsetY = (selectedCircleSize + textHeight) / 2;
+
+    // Create the text
     await miro.board.createText({
       content: `${this.enteredName}`,
       style: {
@@ -75,7 +81,7 @@ export class MiroService {
         textAlign: 'center'
       },
       x: centerX,
-      y: centerY + (selectedTextSize % 10) + 15,
+      y: centerY + offsetY,
       width: 105
     });
 
