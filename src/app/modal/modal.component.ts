@@ -1,10 +1,14 @@
 import { Component } from '@angular/core';
 import { MiroService } from '../miro.service';
+import { FormsModule } from '@angular/forms';
+import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-modal',
   templateUrl: './modal.component.html',
-  styleUrls: ['./modal.component.css']
+  styleUrls: ['./modal.component.css'],
+  standalone: true,
+  imports: [FormsModule, NgIf]
 })
 export class ModalComponent {
   enteredName: string = '';

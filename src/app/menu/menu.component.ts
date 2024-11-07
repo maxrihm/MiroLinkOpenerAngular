@@ -1,10 +1,14 @@
 import { Component } from '@angular/core';
 import { MiroService } from '../miro.service';
+import { NgIf } from '@angular/common';
+import { ModalComponent } from '../modal/modal.component';
 
 @Component({
   selector: 'app-menu',
   templateUrl: './menu.component.html',
-  styleUrls: ['./menu.component.css']
+  styleUrls: ['./menu.component.css'],
+  standalone: true,
+  imports: [NgIf, ModalComponent]
 })
 export class MenuComponent {
   hideTimeout: any;
