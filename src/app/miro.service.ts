@@ -13,24 +13,34 @@ export class MiroService {
   selectedExtension: string = '.canvas';
   selectedSize: string = 'medium';
 
+  private activeBaseLink!: string; 
+
   constructor() {
     this.setupAuxClickListener();
+    this.initializeBaseLink();
   }
 
-  handleSubmit(
-    name: string,
-    extension: string,
-    size: string
-  ): void {
+
+  private initializeBaseLink(): void {
+    console.log(window.location.href);
+    if (window.location.href.includes("uXjVKNnndTA")) {
+      this.activeBaseLink = "obsidian://advanced-uri?vault=Obsidian%20Vault&filepath=Frontend%252F";
+      console.log("Using Frontend base link format.");
+    } else {
+      this.activeBaseLink = "obsidian://advanced-uri?vault=Obsidian%20Vault&filepath=Graph%2520Nodes%252F";
+      console.log("Using GraphNodes base link format.");
+    }
+  }
+
+
+  handleSubmit(name: string, extension: string, size: string): void {
     this.enteredName = name;
     this.selectedExtension = extension;
     this.selectedSize = size;
 
     if (this.enteredName) {
-      this.generatedLink = `obsidian://advanced-uri?vault=Obsidian%20Vault&filepath=Graph%2520Nodes%252F${encodeURIComponent(
-        this.enteredName
-      )}${this.selectedExtension}`;
-      console.log('Entered name:', this.enteredName);
+      this.generatedLink = `${this.activeBaseLink}${encodeURIComponent(this.enteredName)}${this.selectedExtension}`;
+
       console.log('Generated link:', this.generatedLink);
       this.createShapeAndText();
       this.openCreatedLink();
