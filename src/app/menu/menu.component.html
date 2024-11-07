@@ -1,0 +1,19 @@
+<button
+  id="mainButton"
+  (mouseenter)="showDropdown()"
+  (mouseleave)="startHideTimeout()"
+>
+  Menu
+</button>
+
+<div
+  id="dropdownMenu"
+  *ngIf="miroService.isDropdownVisible"
+  (mouseenter)="showDropdown()"
+  (mouseleave)="startHideTimeout()"
+>
+  <div (click)="showModalMenu()">Create Node</div>
+  <!-- Add more menu options if needed -->
+</div>
+
+<app-modal *ngIf="miroService.isModalVisible"></app-modal>

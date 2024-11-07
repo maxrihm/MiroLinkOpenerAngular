@@ -1,0 +1,21 @@
+{
+  "manifest_version": 3,
+  "name": "Miro Link Opener Angular",
+  "version": "1.0",
+  "description": "Opens linked objects in Miro with middle mouse button using Angular.",
+  "permissions": ["activeTab"],
+  "host_permissions": ["https://miro.com/*"],
+  "web_accessible_resources": [
+    {
+      "resources": ["*.js", "*.css", "index.html"],
+      "matches": ["https://miro.com/*"]
+    }
+  ],
+  "content_scripts": [
+    {
+      "matches": ["https://miro.com/app/board/*"],
+      "js": ["content-script.js"],
+      "run_at": "document_start"
+    }
+  ]
+}

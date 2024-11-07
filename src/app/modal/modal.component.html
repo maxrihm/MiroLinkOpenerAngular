@@ -1,0 +1,59 @@
+<div id="modal">
+  <div class="modal-content">
+    <input
+      type="text"
+      placeholder="Enter name"
+      class="modal-input"
+      [(ngModel)]="enteredName"
+    />
+
+    <select class="modal-input" [(ngModel)]="selectedExtension">
+      <option value=".canvas">Create .canvas</option>
+      <option value=".md">Create .md</option>
+    </select>
+
+    <div class="size-container">
+      <label class="radio-label">
+        <input
+          type="radio"
+          name="size"
+          value="small"
+          [(ngModel)]="selectedSize"
+        />
+        Small
+      </label>
+      <label class="radio-label">
+        <input
+          type="radio"
+          name="size"
+          value="medium"
+          [(ngModel)]="selectedSize"
+        />
+        Medium
+      </label>
+      <label class="radio-label">
+        <input
+          type="radio"
+          name="size"
+          value="large"
+          [(ngModel)]="selectedSize"
+        />
+        Large
+      </label>
+    </div>
+
+    <button
+      class="modal-button submit-button"
+      (click)="handleSubmit()"
+    >
+      Create Node
+    </button>
+
+    <button
+      class="modal-button cancel-button"
+      (click)="closeModal()"
+    >
+      Cancel
+    </button>
+  </div>
+</div>
