@@ -1,6 +1,6 @@
 #mainButton {
   position: fixed;
-  top: 10px;
+  top: 63px;
   right: 10px;
   z-index: 1000;
   padding: 10px 20px;
@@ -16,7 +16,7 @@
 
 #dropdownMenu {
   position: fixed;
-  top: 50px;
+  top: 103px;
   right: 10px;
   z-index: 1001;
   background-color: #fff;

@@ -9,3 +9,4 @@ public/favicon.ico
 tsconfig.json
 tsconfig.app.json
 tsconfig.spec.json
+.filesignore
