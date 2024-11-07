@@ -15,7 +15,7 @@
     {
       "matches": ["https://miro.com/app/board/*"],
       "js": ["content-script.js"],
-      "run_at": "document_start"
+      "run_at": "document_idle"
     }
   ]
 }

@@ -1,0 +1,11 @@
+README.md
+.editorconfig
+.gitignore
+.vscode/extensions.json
+.vscode/launch.json
+.vscode/tasks.json
+package-lock.json
+public/favicon.ico
+tsconfig.json
+tsconfig.app.json
+tsconfig.spec.json
