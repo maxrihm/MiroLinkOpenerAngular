@@ -3,16 +3,14 @@
     const appRoot = document.createElement('app-root');
     document.body.appendChild(appRoot);
 
-    // Load the Angular app
-    const script = document.createElement('script');
-    script.src = chrome.runtime.getURL('runtime.js');
-    script.type = 'module';
-    document.body.appendChild(script);
+    const scripts = ['runtime.js', 'polyfills.js', 'main.js'];
 
-    const scriptMain = document.createElement('script');
-    scriptMain.src = chrome.runtime.getURL('main.js');
-    scriptMain.type = 'module';
-    document.body.appendChild(scriptMain);
+    scripts.forEach((scriptName) => {
+      const script = document.createElement('script');
+      script.src = chrome.runtime.getURL(scriptName);
+      script.type = 'module';
+      document.body.appendChild(script);
+    });
 
     // Include styles
     const styles = document.createElement('link');
