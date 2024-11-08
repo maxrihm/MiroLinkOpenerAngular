@@ -50,7 +50,8 @@ export class ClickHandlerService {
     const currentLink = selection && selection.length > 0 && selection[0].linkedTo ? selection[0].linkedTo : null;
 
     if (currentLink && currentLink !== this.initialLink) {
-      this.linkOpenerService.openLink(currentLink);
+      this.linkOpenerService.openLink(currentLink); // Open the new link
+      await miro.board.deselect(); // Deselect the item after opening the link
     }
   }
 }
