@@ -13,13 +13,11 @@ export class MiroService {
   selectedExtension: string = '.canvas';
   selectedSize: string = 'medium';
 
-  private activeBaseLink!: string; 
+  private activeBaseLink!: string;
 
   constructor() {
-    this.setupAuxClickListener();
     this.initializeBaseLink();
   }
-
 
   private initializeBaseLink(): void {
     console.log(window.location.href);
@@ -32,7 +30,6 @@ export class MiroService {
     }
   }
 
-
   handleSubmit(name: string, extension: string, size: string): void {
     this.enteredName = name;
     this.selectedExtension = extension;
@@ -40,10 +37,8 @@ export class MiroService {
 
     if (this.enteredName) {
       this.generatedLink = `${this.activeBaseLink}${encodeURIComponent(this.enteredName)}${this.selectedExtension}`;
-
       console.log('Generated link:', this.generatedLink);
       this.createShapeAndText();
-      this.openCreatedLink();
     } else {
       alert('Please enter a name.');
     }
@@ -62,7 +57,6 @@ export class MiroService {
     const selectedCircleSize = sizeMap[this.selectedSize];
     const selectedTextSize = sizeMap[this.selectedSize];
 
-    // Create the circle
     await miro.board.createShape({
       shape: 'circle',
       style: {
@@ -77,11 +71,9 @@ export class MiroService {
       linkedTo: this.generatedLink
     });
 
-    // Calculate the text height and offset
     const textHeight = selectedTextSize * 1.42857;
     const offsetY = (selectedCircleSize + textHeight) / 2;
 
-    // Create the text
     await miro.board.createText({
       content: `${this.enteredName}`,
       style: {
@@ -96,62 +88,5 @@ export class MiroService {
     });
 
     console.log('Shape and text created on the Miro board.');
-  }
-
-  openCreatedLink(): void {
-    if (this.generatedLink) {
-      this.sendPostRequest(this.createData(this.generatedLink));
-    } else {
-      console.log('No link to open.');
-    }
-  }
-
-  createData(linkedTo: string): any {
-    if (linkedTo.includes('obsidian')) {
-      return {
-        Arg1: 'openObsidian',
-        Arg2: linkedTo
-      };
-    } else {
-      return {
-        Arg1: 'openCanary',
-        Arg2: linkedTo
-      };
-    }
-  }
-
-  sendPostRequest(data: any): void {
-    fetch('http://localhost:5199/Commands/ExecuteCommand', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      })
-      .then((data) => console.log('Success:', data))
-      .catch((error) => console.error('Error:', error));
-  }
-
-  setupAuxClickListener(): void {
-    document.addEventListener('auxclick', this.handleAuxClick.bind(this));
-  }
-
-  async handleAuxClick(event: any): Promise<void> {
-    if (event.button === 1) {
-      setTimeout(async () => {
-        const selection = await miro.board.getSelection();
-        if (selection.length > 0 && selection[0].linkedTo) {
-          const data = this.createData(selection[0].linkedTo);
-          this.sendPostRequest(data);
-        }
-        await miro.board.deselect();
-      }, 10);
-    }
   }
 }
