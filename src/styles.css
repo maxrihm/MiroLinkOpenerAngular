@@ -1,1 +1,31 @@
 /* You can add global styles to this file, and also import other style files */
+
+/* Spark container for holding spark elements */
+.spark-container {
+  position: fixed;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+}
+
+/* Spark element styling */
+.spark {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: gold;
+  position: absolute;
+  animation: spark-animation 0.5s ease-out forwards;
+  opacity: 0;
+}
+
+/* Keyframes for spark animation */
+@keyframes spark-animation {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--spark-x), var(--spark-y)) scale(0.8);
+  }
+}
