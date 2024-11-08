@@ -10,7 +10,7 @@
     width: 6px;
     height: 6px;
     border-radius: 50%;
-    background: radial-gradient(circle, #8a2be2, #4b0082); /* Bluish-purple gradient */
+    background: radial-gradient(circle, #00bfff, #0077be); /* Bright blue gradient */
     position: absolute;
     animation: spark-animation 0.5s ease-out forwards;
     opacity: 0;
