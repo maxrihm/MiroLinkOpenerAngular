@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { LinkOpenerService } from './link-opener.service';
+import { CssAnimationsService } from './css-animations.service';
 
 declare var miro: any;
 
@@ -11,7 +12,10 @@ export class ClickHandlerService {
   private readonly SHORT_CLICK_THRESHOLD = 200;
   private initialLink: string | null = null;
 
-  constructor(private linkOpenerService: LinkOpenerService) {
+  constructor(
+    private linkOpenerService: LinkOpenerService,
+    private cssAnimationsService: CssAnimationsService // Inject the animation service
+  ) {
     this.initEventListeners();
     this.checkInitialLink();
   }
@@ -50,8 +54,9 @@ export class ClickHandlerService {
     const currentLink = selection && selection.length > 0 && selection[0].linkedTo ? selection[0].linkedTo : null;
 
     if (currentLink && currentLink !== this.initialLink) {
-      this.linkOpenerService.openLink(currentLink); // Open the new link
-      await miro.board.deselect(); // Deselect the item after opening the link
+      this.linkOpenerService.openLink(currentLink);
+      await miro.board.deselect();
+      this.cssAnimationsService.triggerSparkEffect(); // Trigger the spark effect after deselection
     }
   }
 }
