@@ -1,10 +1,13 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http'; // Import HttpClient
+import { catchError } from 'rxjs/operators';
+import { throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LinkOpenerService {
-  constructor() {}
+  constructor(private http: HttpClient) {} // Inject HttpClient
 
   openLink(link: string): void {
     const data = this.createData(link);
@@ -20,18 +23,13 @@ export class LinkOpenerService {
   }
 
   private sendPostRequest(data: any): void {
-    fetch('http://localhost:5199/Commands/ExecuteCommand', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    })
-      .then((response) => {
-        if (!response.ok) throw new Error('Network response was not ok');
-        return response.json();
-      })
-      .then((responseData) => console.log('Success:', responseData))
-      .catch((error) => console.error('Error:', error));
+    this.http.post('http://localhost:5199/Commands/ExecuteCommand', data)
+      .pipe(
+        catchError(error => {
+          console.error('Error:', error);
+          return throwError(() => error); // Updated to the new throwError syntax
+        })
+      )
+      .subscribe(responseData => console.log('Success:', responseData));
   }
 }
