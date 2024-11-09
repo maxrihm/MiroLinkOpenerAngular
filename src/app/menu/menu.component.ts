@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { MiroService } from '../miro.service';
 import { NgIf } from '@angular/common';
 import { ModalComponent } from '../modal/modal.component';
+import { RedDotService } from '../red-dot.service';
 
 @Component({
   selector: 'app-menu',
@@ -13,14 +14,16 @@ import { ModalComponent } from '../modal/modal.component';
 export class MenuComponent {
   hideTimeout: any;
 
-  constructor(public miroService: MiroService) {}
+  constructor(public miroService: MiroService, private redDotService: RedDotService) {}
 
   showDropdown(): void {
+    this.redDotService.showRedDot(); // Show the red dot
     clearTimeout(this.hideTimeout);
     this.miroService.isDropdownVisible = true;
   }
 
   startHideTimeout(): void {
+    this.redDotService.hideRedDot(); // Hide the red dot
     this.hideTimeout = setTimeout(() => {
       this.miroService.isDropdownVisible = false;
     }, 200);
