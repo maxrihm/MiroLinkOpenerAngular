@@ -23,9 +23,20 @@
 }
 
 .modal-input {
+  width: 100%; /* Ensures full width of container */
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
+  box-sizing: border-box; /* Ensures padding doesn’t affect width */
+}
+
+/* Smaller styling for the generated filename field */
+.modal-input.small-input {
+  font-size: 0.9em; /* Slightly smaller font */
+  padding: 8px; /* Reduced padding */
+  color: gray;
+  background-color: #f0f0f0;
+  width: 95%; /* Optional, slightly narrower */
 }
 
 .modal-button {

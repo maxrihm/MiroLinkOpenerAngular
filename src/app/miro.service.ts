@@ -9,6 +9,7 @@ export class MiroService {
   isDropdownVisible: boolean = false;
   isModalVisible: boolean = false;
   enteredName: string = '';
+  fileName: string = ''; // Add fileName property
   generatedLink: string = '';
   selectedExtension: string = '.canvas';
   selectedSize: string = 'medium';
@@ -30,17 +31,22 @@ export class MiroService {
     }
   }
 
-  handleSubmit(name: string, extension: string, size: string): void {
-    this.enteredName = name;
+  filterFileName(nodeName: string): string {
+    return nodeName.replace(/[\\\/:*?"<>|]/g, '');
+  }
+
+  handleSubmit(nodeName: string, fileName: string, extension: string, size: string): void {
+    this.enteredName = nodeName;
+    this.fileName = fileName; // Set the file name
     this.selectedExtension = extension;
     this.selectedSize = size;
 
-    if (this.enteredName) {
-      this.generatedLink = `${this.activeBaseLink}${encodeURIComponent(this.enteredName)}${this.selectedExtension}`;
+    if (this.enteredName && this.fileName) {
+      this.generatedLink = `${this.activeBaseLink}${encodeURIComponent(this.fileName)}${this.selectedExtension}`;
       console.log('Generated link:', this.generatedLink);
       this.createShapeAndText();
     } else {
-      alert('Please enter a name.');
+      alert('Please enter a node name and file name.');
     }
   }
 

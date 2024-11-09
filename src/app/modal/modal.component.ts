@@ -12,21 +12,33 @@ import { NgIf } from '@angular/common';
 })
 export class ModalComponent implements OnDestroy {
   enteredName: string = '';
+  fileName: string = ''; // Holds the filtered file name
   selectedExtension: string = '.canvas';
   selectedSize: string = 'medium';
 
   constructor(private miroService: MiroService) {}
 
+  // Update file name automatically when node name changes
+  onNodeNameChange(nodeName: string): void {
+    this.fileName = this.miroService.filterFileName(nodeName);
+  }
+
+  // Apply filtering to the editable file name field as user types
+  onFileNameChange(fileName: string): void {
+    this.fileName = this.miroService.filterFileName(fileName);
+  }
+
   handleSubmit(): void {
-    if (this.enteredName) {
+    if (this.enteredName && this.fileName) {
       this.miroService.handleSubmit(
         this.enteredName,
+        this.fileName,
         this.selectedExtension,
         this.selectedSize
       );
       this.miroService.isModalVisible = false;
     } else {
-      alert('Please enter a name.');
+      alert('Please enter a name and a file name.');
     }
   }
 

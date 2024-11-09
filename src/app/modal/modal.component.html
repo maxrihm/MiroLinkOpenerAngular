@@ -5,6 +5,16 @@
       placeholder="Enter name"
       class="modal-input"
       [(ngModel)]="enteredName"
+      (ngModelChange)="onNodeNameChange($event)"
+    />
+
+    <!-- Editable file name input field with change event to filter file name -->
+    <input
+      type="text"
+      placeholder="Generated file name"
+      class="modal-input small-input"
+      [(ngModel)]="fileName"
+      (ngModelChange)="onFileNameChange($event)"
     />
 
     <select class="modal-input" [(ngModel)]="selectedExtension">
