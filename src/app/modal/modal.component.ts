@@ -15,6 +15,7 @@ export class ModalComponent implements OnDestroy {
   fileName: string = ''; // Holds the filtered file name
   selectedExtension: string = '.canvas';
   selectedSize: string = 'medium';
+  selectedNodeType: string = 'node'; // New property to determine if node or text
 
   constructor(private miroService: MiroService) {}
 
@@ -30,11 +31,13 @@ export class ModalComponent implements OnDestroy {
 
   handleSubmit(): void {
     if (this.enteredName && this.fileName) {
+      // Pass the selectedNodeType to the miroService to handle accordingly
       this.miroService.handleSubmit(
         this.enteredName,
         this.fileName,
         this.selectedExtension,
-        this.selectedSize
+        this.selectedSize,
+        this.selectedNodeType
       );
       this.miroService.isModalVisible = false;
     } else {

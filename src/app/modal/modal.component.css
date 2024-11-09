@@ -56,6 +56,8 @@
   background-color: #e0e0e0;
 }
 
+.file-type-container,
+.node-type-container,
 .size-container {
   display: flex;
   gap: 10px;

@@ -8,7 +8,6 @@
       (ngModelChange)="onNodeNameChange($event)"
     />
 
-    <!-- Editable file name input field with change event to filter file name -->
     <input
       type="text"
       placeholder="Generated file name"
@@ -17,52 +16,55 @@
       (ngModelChange)="onFileNameChange($event)"
     />
 
-    <select class="modal-input" [(ngModel)]="selectedExtension">
-      <option value=".canvas">Create .canvas</option>
-      <option value=".md">Create .md</option>
-    </select>
+    <!-- Add radio buttons for node type (canvas or markdown) -->
+    <div class="file-type-container">
+      <label>
+        <input type="radio" name="fileType" value=".canvas" [(ngModel)]="selectedExtension" />
+        Create Canvas
+      </label>
+      <label>
+        <input type="radio" name="fileType" value=".md" [(ngModel)]="selectedExtension" />
+        Create MD
+      </label>
+    </div>
 
+    <!-- Radio buttons for node or text selection -->
+    <div class="node-type-container">
+      <label>
+        <input type="radio" name="nodeType" value="node" [(ngModel)]="selectedNodeType" />
+        Node
+      </label>
+      <label>
+        <input type="radio" name="nodeType" value="text" [(ngModel)]="selectedNodeType" />
+        Text
+      </label>
+    </div>
+
+    <!-- Radio buttons for size selection, including the new XS option -->
     <div class="size-container">
       <label class="radio-label">
-        <input
-          type="radio"
-          name="size"
-          value="small"
-          [(ngModel)]="selectedSize"
-        />
+        <input type="radio" name="size" value="xs" [(ngModel)]="selectedSize" />
+        Extra Small
+      </label>
+      <label class="radio-label">
+        <input type="radio" name="size" value="small" [(ngModel)]="selectedSize" />
         Small
       </label>
       <label class="radio-label">
-        <input
-          type="radio"
-          name="size"
-          value="medium"
-          [(ngModel)]="selectedSize"
-        />
+        <input type="radio" name="size" value="medium" [(ngModel)]="selectedSize" />
         Medium
       </label>
       <label class="radio-label">
-        <input
-          type="radio"
-          name="size"
-          value="large"
-          [(ngModel)]="selectedSize"
-        />
+        <input type="radio" name="size" value="large" [(ngModel)]="selectedSize" />
         Large
       </label>
     </div>
 
-    <button
-      class="modal-button submit-button"
-      (click)="handleSubmit()"
-    >
+    <button class="modal-button submit-button" (click)="handleSubmit()">
       Create Node
     </button>
 
-    <button
-      class="modal-button cancel-button"
-      (click)="closeModal()"
-    >
+    <button class="modal-button cancel-button" (click)="closeModal()">
       Cancel
     </button>
   </div>
