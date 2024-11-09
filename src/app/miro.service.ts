@@ -66,6 +66,10 @@ export class MiroService {
     const selectedCircleSize = sizeMap[this.selectedSize];
     const selectedTextSize = sizeMap[this.selectedSize];
 
+    // Calculate the ideal width based on font size and content length
+    const textLength = this.enteredName.length;
+    const idealTextWidth = selectedTextSize * textLength * 0.6; // Scaling factor for width estimation
+
     if (this.selectedNodeType === 'node') {
       // Create a circular shape with the link assigned to it
       await miro.board.createShape({
@@ -85,7 +89,7 @@ export class MiroService {
       const textHeight = selectedTextSize * 1.42857;
       const offsetY = (selectedCircleSize + textHeight) / 2;
 
-      // Create text without a link
+      // Create text without a link, with dynamically calculated width
       await miro.board.createText({
         content: `${this.enteredName}`,
         style: {
@@ -96,11 +100,11 @@ export class MiroService {
         },
         x: centerX,
         y: centerY + offsetY,
-        width: 105
+        width: idealTextWidth // Improved width calculation
       });
 
     } else if (this.selectedNodeType === 'text') {
-      // Create text only with a link if the selected type is "text"
+      // Create text only with a link, with dynamically calculated width
       await miro.board.createText({
         content: `${this.enteredName}`,
         style: {
@@ -111,7 +115,7 @@ export class MiroService {
         },
         x: centerX,
         y: centerY,
-        // width: 105,
+        width: idealTextWidth, // Improved width calculation
         linkedTo: this.generatedLink
       });
     }
