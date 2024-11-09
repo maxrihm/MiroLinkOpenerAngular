@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener, OnDestroy } from '@angular/core';
 import { MiroService } from '../miro.service';
 import { FormsModule } from '@angular/forms';
 import { NgIf } from '@angular/common';
@@ -10,7 +10,7 @@ import { NgIf } from '@angular/common';
   standalone: true,
   imports: [FormsModule, NgIf]
 })
-export class ModalComponent {
+export class ModalComponent implements OnDestroy {
   enteredName: string = '';
   selectedExtension: string = '.canvas';
   selectedSize: string = 'medium';
@@ -32,5 +32,18 @@ export class ModalComponent {
 
   closeModal(): void {
     this.miroService.isModalVisible = false;
+  }
+
+  @HostListener('document:keydown.enter', ['$event'])
+  onEnterPress(event: KeyboardEvent): void {
+    // Trigger only if modal is visible
+    if (this.miroService.isModalVisible) {
+      event.preventDefault(); // Prevent default behavior
+      this.handleSubmit();    // Call handleSubmit on Enter
+    }
+  }
+
+  ngOnDestroy(): void {
+    // Cleanup any additional listeners or subscriptions if needed
   }
 }
