@@ -26,6 +26,9 @@ export class MiroService {
     if (window.location.href.includes("uXjVKNnndTA")) {
       this.activeBaseLink = "obsidian://advanced-uri?vault=Obsidian%20Vault&filepath=Frontend%252F";
       console.log("Using Frontend base link format.");
+    } else if (window.location.href.includes("uXjVLGZJr7w")) {
+      this.activeBaseLink = "obsidian://advanced-uri?vault=Obsidian%20Vault&filepath=Forex%252F";
+      console.log("Using NewLink base link format.");
     } else {
       this.activeBaseLink = "obsidian://advanced-uri?vault=Obsidian%20Vault&filepath=Graph%2520Nodes%252F";
       console.log("Using GraphNodes base link format.");
