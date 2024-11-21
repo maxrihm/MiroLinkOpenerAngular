@@ -45,17 +45,25 @@ export class ClickHandlerService {
   }
 
   private async checkInitialLink(): Promise<void> {
-    const selection = await miro.board.getSelection();
-    this.initialLink = selection && selection.length > 0 && selection[0].linkedTo ? selection[0].linkedTo : null;
+    // Use the new experimental selection method
+    const selection = await miro.board.experimental.getSelection();
+
+    if (selection && selection.length > 0) {
+      const linkedTo = selection[0]?.linkedTo || null;
+      this.initialLink = linkedTo;
+    } else {
+      this.initialLink = null;
+    }
   }
 
   private async runMainLogic(): Promise<void> {
-    const selection = await miro.board.getSelection();
-    const currentLink = selection && selection.length > 0 && selection[0].linkedTo ? selection[0].linkedTo : null;
+    // Get the current selection using the experimental method
+    const selection = await miro.board.experimental.getSelection();
+    const currentLink = selection && selection.length > 0 ? selection[0]?.linkedTo || null : null;
 
     if (currentLink && currentLink !== this.initialLink) {
       this.linkOpenerService.openLink(currentLink);
-      await miro.board.deselect();
+      await miro.board.experimental.deselect();
       this.cssAnimationsService.triggerSparkEffect(); // Trigger the spark effect after deselection
     }
   }
