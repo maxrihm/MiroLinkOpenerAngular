@@ -59,6 +59,21 @@ export class MiroService {
 
   }
 
+async updateSelectedMindMapNode(
+  nodeName: string,
+  fileName: string,
+  extension: string,
+  size: string
+): Promise<void> {
+  const selectedItems = await miro.board.experimental.getSelection();
+  const selectedNode = selectedItems[0];
+  const link = `${this.activeBaseLink}${encodeURIComponent(fileName)}${extension}`;
+  selectedNode.linkedTo = link;
+  selectedNode.nodeView.content = nodeName;
+  await selectedNode.sync();
+}
+
+
   async createShapeAndText(): Promise<void> {
     const viewport = await miro.board.viewport.get();
     const centerX = viewport.x + viewport.width / 2;
@@ -137,6 +152,13 @@ export class MiroService {
 
       if (this.selectedNodeType === 'mindmap') {
         this.createMindMapNode(
+          this.enteredName,
+          this.fileName,
+          this.selectedExtension,
+          this.selectedSize
+        );
+      } else if (this.selectedNodeType === 'mindmap-update') {
+        this.updateSelectedMindMapNode(
           this.enteredName,
           this.fileName,
           this.selectedExtension,
