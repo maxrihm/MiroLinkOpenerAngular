@@ -9,11 +9,11 @@ export class MiroService {
   isDropdownVisible: boolean = false;
   isModalVisible: boolean = false;
   enteredName: string = '';
-  fileName: string = ''; // Add fileName property
+  fileName: string = '';
   generatedLink: string = '';
   selectedExtension: string = '.canvas';
   selectedSize: string = 'medium';
-  selectedNodeType: string = ''; // Add selectedNodeType property
+  selectedNodeType: string = '';
 
   private activeBaseLink!: string;
 
@@ -22,16 +22,12 @@ export class MiroService {
   }
 
   private initializeBaseLink(): void {
-    console.log(window.location.href);
-    if (window.location.href.includes("uXjVKNnndTA")) {
-      this.activeBaseLink = "obsidian://advanced-uri?vault=Obsidian%20Vault&filepath=Frontend%252F";
-      console.log("Using Frontend base link format.");
-    } else if (window.location.href.includes("uXjVLGZJr7w")) {
-      this.activeBaseLink = "obsidian://advanced-uri?vault=Obsidian%20Vault&filepath=Forex%252F";
-      console.log("Using NewLink base link format.");
+    if (window.location.href.includes('uXjVKNnndTA')) {
+      this.activeBaseLink = 'obsidian://advanced-uri?vault=Obsidian%20Vault&filepath=Frontend%252F';
+    } else if (window.location.href.includes('uXjVLGZJr7w')) {
+      this.activeBaseLink = 'obsidian://advanced-uri?vault=Obsidian%20Vault&filepath=Forex%252F';
     } else {
-      this.activeBaseLink = "obsidian://advanced-uri?vault=Obsidian%20Vault&filepath=Graph%2520Nodes%252F";
-      console.log("Using GraphNodes base link format.");
+      this.activeBaseLink = 'obsidian://advanced-uri?vault=Obsidian%20Vault&filepath=Graph%2520Nodes%252F';
     }
   }
 
@@ -39,20 +35,28 @@ export class MiroService {
     return nodeName.replace(/[\\\/:*?"<>|]/g, '');
   }
 
-  handleSubmit(nodeName: string, fileName: string, extension: string, size: string, nodeType: string): void {
-    this.enteredName = nodeName;
-    this.fileName = fileName; // Set the file name
-    this.selectedExtension = extension;
-    this.selectedSize = size;
-    this.selectedNodeType = nodeType;
+  async createMindMapNode(
+    nodeName: string,
+    fileName: string,
+    extension: string,
+    size: string
+  ): Promise<void> {
+    const viewport = await miro.board.viewport.get();
+    const centerX = viewport.x + viewport.width / 2;
+    const centerY = viewport.y + viewport.height / 2;
 
-    if (this.enteredName && this.fileName) {
-      this.generatedLink = `${this.activeBaseLink}${encodeURIComponent(this.fileName)}${this.selectedExtension}`;
-      console.log('Generated link:', this.generatedLink);
-      this.createShapeAndText();
-    } else {
-      alert('Please enter a node name and file name.');
-    }
+    const link = `${this.activeBaseLink}${encodeURIComponent(fileName)}${extension}`;
+
+    await miro.board.experimental.createMindmapNode({
+      nodeView: {
+        type: 'text',
+        content: nodeName
+      },
+      x: centerX,
+      y: centerY,
+      linkedTo: link,
+    });
+
   }
 
   async createShapeAndText(): Promise<void> {
@@ -69,12 +73,10 @@ export class MiroService {
     const selectedCircleSize = sizeMap[this.selectedSize];
     const selectedTextSize = sizeMap[this.selectedSize];
 
-    // Calculate the ideal width based on font size and content length
     const textLength = this.enteredName.length;
-    const idealTextWidth = selectedTextSize * textLength * 0.6; // Scaling factor for width estimation
+    const idealTextWidth = selectedTextSize * textLength * 0.6;
 
     if (this.selectedNodeType === 'node') {
-      // Create a circular shape with the link assigned to it
       await miro.board.createShape({
         shape: 'circle',
         style: {
@@ -86,13 +88,12 @@ export class MiroService {
         y: centerY,
         width: selectedCircleSize,
         height: selectedCircleSize,
-        linkedTo: this.generatedLink // Link assigned only to the shape
+        linkedTo: this.generatedLink
       });
 
       const textHeight = selectedTextSize * 1.42857;
       const offsetY = (selectedCircleSize + textHeight) / 2;
 
-      // Create text without a link, with dynamically calculated width
       await miro.board.createText({
         content: `${this.enteredName}`,
         style: {
@@ -103,11 +104,10 @@ export class MiroService {
         },
         x: centerX,
         y: centerY + offsetY,
-        width: idealTextWidth // Improved width calculation
+        width: idealTextWidth
       });
 
     } else if (this.selectedNodeType === 'text') {
-      // Create text only with a link, with dynamically calculated width
       await miro.board.createText({
         content: `${this.enteredName}`,
         style: {
@@ -118,11 +118,35 @@ export class MiroService {
         },
         x: centerX,
         y: centerY,
-        width: idealTextWidth, // Improved width calculation
+        width: idealTextWidth,
         linkedTo: this.generatedLink
       });
     }
+  }
 
-    console.log('Shape and/or text created on the Miro board.');
+  handleSubmit(nodeName: string, fileName: string, extension: string, size: string, nodeType: string): void {
+    this.enteredName = nodeName;
+    this.fileName = fileName;
+    this.selectedExtension = extension;
+    this.selectedSize = size;
+    this.selectedNodeType = nodeType;
+
+    if (this.enteredName && this.fileName) {
+      this.generatedLink = `${this.activeBaseLink}${encodeURIComponent(this.fileName)}${this.selectedExtension}`;
+      console.log('Generated link:', this.generatedLink);
+
+      if (this.selectedNodeType === 'mindmap') {
+        this.createMindMapNode(
+          this.enteredName,
+          this.fileName,
+          this.selectedExtension,
+          this.selectedSize
+        );
+      } else {
+        this.createShapeAndText();
+      }
+    } else {
+      alert('Please enter a node name and file name.');
+    }
   }
 }
