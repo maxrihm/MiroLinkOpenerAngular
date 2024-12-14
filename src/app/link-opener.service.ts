@@ -18,6 +18,8 @@ export class LinkOpenerService {
     switch (true) {
       case link.includes('https://select//'):
         return { Arg1: 'openSelection', Arg2: link };
+        case link.includes('https://code-book//'):
+          return { Arg1: 'openCodeBook', Arg2: link };
       case link.includes('obsidian'):
         return { Arg1: 'openObsidian', Arg2: link };
       default:
