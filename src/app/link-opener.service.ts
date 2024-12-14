@@ -15,10 +15,13 @@ export class LinkOpenerService {
   }
 
   private createData(link: string): any {
-    if (link.includes('obsidian')) {
-      return { Arg1: 'openObsidian', Arg2: link };
-    } else {
-      return { Arg1: 'openCanary', Arg2: link };
+    switch (true) {
+      case link.includes('obsidian'):
+        return { Arg1: 'openObsidian', Arg2: link };
+      case link.includes('https://select//'):
+        return { Arg1: 'openSelection', Arg2: link };
+      default:
+        return { Arg1: 'openCanary', Arg2: link };
     }
   }
 
