@@ -25,36 +25,29 @@ export class DomUtilsService {
     });
   }
 
-  // Utility to wait until a condition is met
-
+  /**
+   * Waits until the provided async condition function returns true, or until timeout.
+   * @param conditionFn A function that returns a Promise<boolean>
+   * @param timeout Timeout in ms
+   */
   async waitForCondition(conditionFn: () => Promise<boolean>, timeout = 10000): Promise<void> {
-
     const start = Date.now();
-
     return new Promise((resolve, reject) => {
-
       const checkCondition = async () => {
-
-        if (await conditionFn()) {
-
-          resolve();
-
-        } else if (Date.now() - start >= timeout) {
-
-          reject(new Error(`Condition not met within timeout.`));
-
-        } else {
-
-          setTimeout(checkCondition, 100);
-
+        try {
+          const result = await conditionFn();
+          if (result) {
+            resolve();
+          } else if (Date.now() - start >= timeout) {
+            reject(new Error(`Condition not met within timeout.`));
+          } else {
+            setTimeout(checkCondition, 100);
+          }
+        } catch (error) {
+          reject(error);
         }
-
       };
-
       checkCondition();
-
     });
-
   }
-
-} 
+}

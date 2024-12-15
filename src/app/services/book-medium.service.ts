@@ -17,7 +17,7 @@ export class BookMediumService {
 
     // Wait for "Personal"
     const personalSpan = await this.domUtils.waitForElement('span', 'Personal');
-    const personalButton = personalSpan.closest('button'); 
+    const personalButton = personalSpan.closest('button');
     if (!personalButton) {
       throw new Error('Parent button for "Personal" not found.');
     }
@@ -31,10 +31,10 @@ export class BookMediumService {
     }
     bookButton.click();
 
-    // After clicking book-medium, we need to wait until selection has 2 objects
+    // Wait until selection has 2 objects
     await this.domUtils.waitForCondition(async () => {
       const selection = await miro.board.experimental.getSelection();
-      return selection && selection.length === 2;
+      return !!selection && selection.length === 2;
     }, 10000);
 
     const selection = await miro.board.experimental.getSelection();
@@ -50,10 +50,8 @@ export class BookMediumService {
       throw new Error('Expected one stencil and one text object.');
     }
 
-    // Assign link to stencil
+    // Assign link and text
     stencilObject.linkedTo = fileLink;
-
-    // Assign text
     textObject.content = enteredName;
 
     // Sync objects
