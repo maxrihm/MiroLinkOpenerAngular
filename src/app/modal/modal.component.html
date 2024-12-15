@@ -16,6 +16,14 @@
       (ngModelChange)="onFileNameChange($event)"
     />
 
+    <!-- New bluish input for direct link -->
+    <input
+      type="text"
+      placeholder="Direct link (optional)"
+      class="modal-input bluish-input"
+      [(ngModel)]="directLink"
+    />
+
     <!-- Add radio buttons for node type (canvas or markdown) -->
     <div class="file-type-container">
       <label>

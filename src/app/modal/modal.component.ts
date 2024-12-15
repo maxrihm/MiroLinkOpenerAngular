@@ -14,6 +14,7 @@ import { NodeCreationFacadeService } from '../services/node-creation-facade.serv
 export class ModalComponent {
   enteredName: string = '';
   fileName: string = '';
+  directLink: string = '';
   selectedExtension: string = '.canvas';
   selectedSize: string = 'medium';
   selectedNodeType: string = 'node';
@@ -32,21 +33,33 @@ export class ModalComponent {
   }
 
   async handleSubmit(): Promise<void> {
-    if (this.enteredName && this.fileName) {
-      const fileLink = this.miroService.buildFileLink(this.fileName, this.selectedExtension);
-      try {
-        await this.nodeCreationFacade.createOrUpdateNode(
-          this.enteredName,
-          fileLink,
-          this.selectedNodeType,
-          this.selectedSize
-        );
-        this.miroService.isModalVisible = false;
-      } catch (error: any) {
-        alert(`Error: ${error.message}`);
-      }
+    if (!this.enteredName && !this.directLink) {
+      alert('Please enter a name or a direct link.');
+      return;
+    }
+
+    let fileLink: string;
+
+    if (this.directLink && this.directLink.trim() !== '') {
+      fileLink = this.directLink.trim();
     } else {
-      alert('Please enter a name and a file name.');
+      if (!this.fileName) {
+        alert('Please enter a file name.');
+        return;
+      }
+      fileLink = this.miroService.buildFileLink(this.fileName, this.selectedExtension);
+    }
+
+    try {
+      await this.nodeCreationFacade.createOrUpdateNode(
+        this.enteredName,
+        fileLink,
+        this.selectedNodeType,
+        this.selectedSize
+      );
+      this.miroService.isModalVisible = false;
+    } catch (error: any) {
+      alert(`Error: ${error.message}`);
     }
   }
 

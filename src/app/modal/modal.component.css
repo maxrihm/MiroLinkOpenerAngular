@@ -13,32 +13,37 @@
 
 .modal-content {
   background-color: #fff;
-  padding: 20px;
+  padding: 30px; /* Increased padding for more space */
   border-radius: 8px;
-  width: 400px;
+  width: 450px; /* Slightly wider so elements have more room */
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 20px; /* Increased gap between elements */
 }
 
 .modal-input {
-  width: 100%; /* Ensures full width of container */
+  width: 100%;
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
-  box-sizing: border-box; /* Ensures padding doesn’t affect width */
+  box-sizing: border-box;
 }
 
-/* Smaller styling for the generated filename field */
 .modal-input.small-input {
-  font-size: 0.9em; /* Slightly smaller font */
-  padding: 8px; /* Reduced padding */
+  font-size: 0.9em;
+  padding: 8px;
   color: gray;
   background-color: #f0f0f0;
-  width: 95%; /* Optional, slightly narrower */
+  width: 95%;
 }
 
+.modal-input.bluish-input {
+  background-color: #e7f1fa;
+  border: 1px solid #a8cce3;
+}
+
+/* Keep the original button styling, just ensure spacing via the gap above. */
 .modal-button {
   padding: 10px;
   border: none;
@@ -61,7 +66,6 @@
 .size-container {
   display: flex;
   gap: 10px;
-  margin-top: 10px;
 }
 
 .radio-label {
