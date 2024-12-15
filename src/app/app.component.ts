@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { ClickHandlerService } from './click-handler.service'; // Import the service
+import { ClickHandlerService } from './services/click-handler.service'; // Import the service
 import { MenuComponent } from './menu/menu.component'; // Import the MenuComponent
-import { RedDotService } from './red-dot.service';
+import { RedDotService } from './services/red-dot.service';
 
 @Component({
   selector: 'app-root',

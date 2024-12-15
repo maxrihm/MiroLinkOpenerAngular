@@ -1,7 +1,8 @@
-import { Component, HostListener, OnDestroy } from '@angular/core';
-import { MiroService } from '../miro.service';
+import { Component, HostListener } from '@angular/core';
+import { MiroService } from '../services/miro.service';
 import { FormsModule } from '@angular/forms';
 import { NgIf } from '@angular/common';
+import { NodeCreationFacadeService } from '../services/node-creation-facade.service';
 
 @Component({
   selector: 'app-modal',
@@ -10,36 +11,40 @@ import { NgIf } from '@angular/common';
   standalone: true,
   imports: [FormsModule, NgIf]
 })
-export class ModalComponent implements OnDestroy {
+export class ModalComponent {
   enteredName: string = '';
-  fileName: string = ''; // Holds the filtered file name
+  fileName: string = '';
   selectedExtension: string = '.canvas';
   selectedSize: string = 'medium';
-  selectedNodeType: string = 'node'; // New property to determine if node or text
+  selectedNodeType: string = 'node';
 
-  constructor(private miroService: MiroService) {}
+  constructor(
+    private miroService: MiroService,
+    private nodeCreationFacade: NodeCreationFacadeService
+  ) {}
 
-  // Update file name automatically when node name changes
   onNodeNameChange(nodeName: string): void {
     this.fileName = this.miroService.filterFileName(nodeName);
   }
 
-  // Apply filtering to the editable file name field as user types
   onFileNameChange(fileName: string): void {
     this.fileName = this.miroService.filterFileName(fileName);
   }
 
-  handleSubmit(): void {
+  async handleSubmit(): Promise<void> {
     if (this.enteredName && this.fileName) {
-      // Pass the selectedNodeType to the miroService to handle accordingly
-      this.miroService.handleSubmit(
-        this.enteredName,
-        this.fileName,
-        this.selectedExtension,
-        this.selectedSize,
-        this.selectedNodeType
-      );
-      this.miroService.isModalVisible = false;
+      const fileLink = this.miroService.buildFileLink(this.fileName, this.selectedExtension);
+      try {
+        await this.nodeCreationFacade.createOrUpdateNode(
+          this.enteredName,
+          fileLink,
+          this.selectedNodeType,
+          this.selectedSize
+        );
+        this.miroService.isModalVisible = false;
+      } catch (error: any) {
+        alert(`Error: ${error.message}`);
+      }
     } else {
       alert('Please enter a name and a file name.');
     }
@@ -51,14 +56,9 @@ export class ModalComponent implements OnDestroy {
 
   @HostListener('document:keydown.enter', ['$event'])
   onEnterPress(event: KeyboardEvent): void {
-    // Trigger only if modal is visible
     if (this.miroService.isModalVisible) {
-      event.preventDefault(); // Prevent default behavior
-      this.handleSubmit();    // Call handleSubmit on Enter
+      event.preventDefault();
+      this.handleSubmit();
     }
-  }
-
-  ngOnDestroy(): void {
-    // Cleanup any additional listeners or subscriptions if needed
   }
 }

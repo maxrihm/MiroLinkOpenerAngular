@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { MiroService } from '../miro.service';
+import { MiroService } from '../services/miro.service';
 import { NgIf } from '@angular/common';
 import { ModalComponent } from '../modal/modal.component';
-import { RedDotService } from '../red-dot.service';
+import { RedDotService } from '../services/red-dot.service';
 
 @Component({
   selector: 'app-menu',
