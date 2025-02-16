@@ -1,8 +1,9 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { MiroService } from '../services/miro.service';
 import { FormsModule } from '@angular/forms';
 import { NgIf } from '@angular/common';
 import { NodeCreationFacadeService } from '../services/node-creation-facade.service';
+import { SettingsService } from '../services/settings.service';
 
 @Component({
   selector: 'app-modal',
@@ -11,7 +12,7 @@ import { NodeCreationFacadeService } from '../services/node-creation-facade.serv
   standalone: true,
   imports: [FormsModule, NgIf]
 })
-export class ModalComponent {
+export class ModalComponent implements OnInit {
   enteredName: string = '';
   fileName: string = '';
   directLink: string = '';
@@ -21,8 +22,17 @@ export class ModalComponent {
 
   constructor(
     private miroService: MiroService,
-    private nodeCreationFacade: NodeCreationFacadeService
+    private nodeCreationFacade: NodeCreationFacadeService,
+    private settingsService: SettingsService
   ) {}
+
+  ngOnInit() {
+    // Load last used settings
+    const lastSettings = this.settingsService.currentSettings;
+    this.selectedExtension = lastSettings.extension;
+    this.selectedSize = lastSettings.size;
+    this.selectedNodeType = lastSettings.nodeType;
+  }
 
   onNodeNameChange(nodeName: string): void {
     this.fileName = this.miroService.filterFileName(nodeName);
@@ -30,6 +40,14 @@ export class ModalComponent {
 
   onFileNameChange(fileName: string): void {
     this.fileName = this.miroService.filterFileName(fileName);
+  }
+
+  updateSettings(): void {
+    this.settingsService.updateSettings({
+      extension: this.selectedExtension,
+      size: this.selectedSize,
+      nodeType: this.selectedNodeType
+    });
   }
 
   async handleSubmit(): Promise<void> {
@@ -51,6 +69,9 @@ export class ModalComponent {
     }
 
     try {
+      // Update settings before creating the node
+      this.updateSettings();
+      
       await this.nodeCreationFacade.createOrUpdateNode(
         this.enteredName,
         fileLink,
