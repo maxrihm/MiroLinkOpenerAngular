@@ -16,7 +16,6 @@
       (ngModelChange)="onFileNameChange($event)"
     />
 
-    <!-- New bluish input for direct link -->
     <input
       type="text"
       placeholder="Direct link (optional)"
@@ -24,7 +23,6 @@
       [(ngModel)]="directLink"
     />
 
-    <!-- Add radio buttons for node type (canvas or markdown) -->
     <div class="file-type-container">
       <label>
         <input type="radio" name="fileType" value=".canvas" [(ngModel)]="selectedExtension" />
@@ -36,7 +34,6 @@
       </label>
     </div>
 
-    <!-- Radio buttons for node or text selection -->
     <div class="node-type-container">
       <label>
         <input type="radio" name="nodeType" value="node" [(ngModel)]="selectedNodeType" />
@@ -55,12 +52,11 @@
         Mindmap
       </label>
       <label>
-        <input type="radio" name="nodeType" value="book-medium" [(ngModel)]="selectedNodeType" />
-        Book-medium
+        <input type="radio" name="nodeType" value="template" [(ngModel)]="selectedNodeType" />
+        Template
       </label>
     </div>
 
-    <!-- Radio buttons for size selection, including the new XS option -->
     <div class="size-container">
       <label class="radio-label">
         <input type="radio" name="size" value="xs" [(ngModel)]="selectedSize" />
@@ -80,10 +76,17 @@
       </label>
     </div>
 
+    <select
+      *ngIf="selectedNodeType === 'template'"
+      [(ngModel)]="selectedTemplateName"
+      class="modal-input"
+    >
+      <option *ngFor="let t of availableTemplates" [value]="t">{{ t }}</option>
+    </select>
+
     <button class="modal-button submit-button" (click)="handleSubmit()">
       Create Node
     </button>
-
     <button class="modal-button cancel-button" (click)="closeModal()">
       Cancel
     </button>
