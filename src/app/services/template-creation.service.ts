@@ -52,6 +52,10 @@ export class TemplateCreationService {
     if (nonTextObject) {
       nonTextObject.linkedTo = fileLink
       await nonTextObject.sync()
+    } else {
+      // If no non-text object is found, apply the link to the text object instead
+      textObject.linkedTo = fileLink
+      await textObject.sync()
     }
   }
 }
