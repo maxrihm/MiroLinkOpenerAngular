@@ -35,10 +35,11 @@ export class ModalComponent implements OnInit {
     this.selectedExtension = lastSettings.extension
     this.selectedSize = lastSettings.size
     this.selectedNodeType = lastSettings.nodeType
-    
+    this.selectedTemplateName = lastSettings.templateName ?? ''
+
     // Set default templates in case HTTP request fails
     this.availableTemplates = ['Book-medium', 'Question']
-    
+
     // Subscribe to templates from the service
     this.templatesListService.templates$.subscribe((templates: string[]) => {
       if (templates && templates.length > 0) {
@@ -63,6 +64,11 @@ export class ModalComponent implements OnInit {
     })
   }
 
+  onTemplateChange(tmpl: string): void {
+    this.selectedTemplateName = tmpl
+    this.settingsService.updateSettings({ templateName: tmpl })
+  }
+
   async handleSubmit(): Promise<void> {
     if (!this.enteredName && !this.directLink) {
       alert('Please enter a name or a direct link.')
@@ -80,6 +86,7 @@ export class ModalComponent implements OnInit {
     }
     try {
       this.updateSettings()
+      this.settingsService.updateSettings({ templateName: this.selectedTemplateName })
       await this.nodeCreationFacade.createOrUpdateNode(
         this.enteredName,
         fileLink,

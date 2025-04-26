@@ -5,6 +5,7 @@ export interface NodeSettings {
   extension: string;
   size: string;
   nodeType: string;
+  templateName?: string;
 }
 
 @Injectable({
@@ -14,7 +15,8 @@ export class SettingsService {
   private defaultSettings: NodeSettings = {
     extension: '.canvas',
     size: 'medium',
-    nodeType: 'node'
+    nodeType: 'node',
+    templateName: ''
   };
 
   private lastUsedSettings = new BehaviorSubject<NodeSettings>(this.defaultSettings);

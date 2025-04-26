@@ -79,6 +79,7 @@
     <select
       *ngIf="selectedNodeType === 'template'"
       [(ngModel)]="selectedTemplateName"
+      (ngModelChange)="onTemplateChange($event)"
       class="modal-input"
     >
       <option *ngFor="let t of availableTemplates" [value]="t">{{ t }}</option>
