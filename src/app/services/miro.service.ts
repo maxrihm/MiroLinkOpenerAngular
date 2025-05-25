@@ -20,12 +20,24 @@ export class MiroService {
   }
 
   private initializeBaseLink(): void {
-    if (window.location.href.includes('uXjVKNnndTA')) {
-      this.activeBaseLink = 'obsidian://advanced-uri?vault=Obsidian%20Vault&filepath=Frontend%252F';
-    } else if (window.location.href.includes('uXjVLGZJr7w')) {
-      this.activeBaseLink = 'obsidian://advanced-uri?vault=Obsidian%20Vault&filepath=Forex%252F';
-    } else {
-      this.activeBaseLink = 'obsidian://advanced-uri?vault=Obsidian%20Vault&filepath=Graph%2520Nodes%252F';
+    const url = window.location.href;
+    
+    switch (true) {
+      case url.includes('uXjVKNnndTA'):
+        this.activeBaseLink = 'obsidian://advanced-uri?vault=Obsidian%20Vault&filepath=Frontend%252F';
+        break;
+
+      case url.includes('uXjVLGZJr7w'):
+        this.activeBaseLink = 'obsidian://advanced-uri?vault=Obsidian%20Vault&filepath=Forex%252F';
+        break;
+
+      case url.includes('uXjVIw_4xP4='):
+        this.activeBaseLink = 'obsidian://advanced-uri?vault=Hobby&filepath=Hobby%252F';
+        break;
+
+      default:
+        this.activeBaseLink = 'obsidian://advanced-uri?vault=Obsidian%20Vault&filepath=Graph%2520Nodes%252F';
+        break;
     }
   }
 
